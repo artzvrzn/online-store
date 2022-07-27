@@ -8,5 +8,4 @@ import lombok.Setter;
 public class Category extends BaseDto {
 
   private String name;
-
 }

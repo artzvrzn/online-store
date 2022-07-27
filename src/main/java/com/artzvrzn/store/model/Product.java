@@ -2,7 +2,7 @@ package com.artzvrzn.store.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +17,5 @@ public class Product extends BaseDto {
   @JsonProperty("cover")
   private Image cover;
   @JsonProperty("images")
-  private Set<Image> images;
-
+  private List<Image> images;
 }

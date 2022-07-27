@@ -12,5 +12,4 @@ import lombok.Setter;
 public class ImageEntity extends BaseEntity {
 
   private String url;
-
 }

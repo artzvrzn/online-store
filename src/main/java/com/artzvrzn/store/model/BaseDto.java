@@ -12,5 +12,4 @@ public abstract class BaseDto {
   private UUID id;
   private LocalDateTime created;
   private LocalDateTime updated;
-
 }

@@ -30,7 +30,7 @@ public class ProductDtoToEntityConverter implements Converter<Product, ProductEn
     entity.setImages(dto.getImages()
         .stream()
         .map(image -> conversionService.convert(image, ImageEntity.class))
-        .collect(Collectors.toSet()));
+        .collect(Collectors.toList()));
     return entity;
   }
 }

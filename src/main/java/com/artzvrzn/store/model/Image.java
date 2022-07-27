@@ -8,5 +8,4 @@ import lombok.Setter;
 public class Image extends BaseDto {
 
   private String url;
-
 }
