@@ -1,11 +1,10 @@
-package com.artzvrzn.store.converter;
+package com.artzvrzn.store.classifier.converter;
 
-import com.artzvrzn.store.dao.entity.CategoryEntity;
-import com.artzvrzn.store.model.Category;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import com.artzvrzn.store.classifier.dao.api.CategoryRepository;
+import com.artzvrzn.store.classifier.dao.entity.CategoryEntity;
+import com.artzvrzn.store.classifier.model.Category;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class CategoryDtoToEntityConverter implements Converter<Category, CategoryEntity> {
 
   @Autowired
-  private ConversionService cs;
+  private CategoryRepository repository;
 
   @Override
   public CategoryEntity convert(Category dto) {
@@ -23,14 +22,12 @@ public class CategoryDtoToEntityConverter implements Converter<Category, Categor
     entity.setUpdated(dto.getUpdated());
     entity.setName(dto.getName());
     if (dto.getParentCategory() != null) {
-      entity.setParentCategory(cs.convert(dto.getParentCategory(), CategoryEntity.class));
+      Optional<CategoryEntity> optional = repository.findById(dto.getParentCategory());
+      if (optional.isEmpty()) {
+        throw new IllegalArgumentException("parent category doesn't exist");
+      }
+      entity.setParentCategory(optional.get());
     }
-    entity.setSubcategories(
-        dto.getSubcategories()
-            .stream()
-            .filter(Objects::nonNull)
-            .map(c -> cs.convert(c, CategoryEntity.class))
-            .collect(Collectors.toList()));
     return entity;
   }
 }

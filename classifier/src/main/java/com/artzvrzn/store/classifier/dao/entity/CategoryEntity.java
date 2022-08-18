@@ -1,24 +1,25 @@
-package com.artzvrzn.store.dao.entity;
+package com.artzvrzn.store.classifier.dao.entity;
 
-import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "category", schema = "app")
 public class CategoryEntity extends BaseEntity {
 
-  @Column(nullable = false)
   private String name;
   @ManyToOne
+  @JoinColumn(referencedColumnName = "id")
   private CategoryEntity parentCategory;
-  @OneToMany(mappedBy = "parentCategory")
-  private List<CategoryEntity> subcategories;
 }
+
