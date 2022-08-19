@@ -11,9 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity<ID> {
   @Id
-  private UUID id;
+  private ID id;
   @Column(columnDefinition = "timestamp(3)")
   private LocalDateTime created;
   @Column(columnDefinition = "timestamp(3)")

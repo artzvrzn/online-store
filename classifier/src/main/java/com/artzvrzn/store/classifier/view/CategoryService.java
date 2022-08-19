@@ -53,7 +53,8 @@ public class CategoryService implements ICategoryService {
     if (dto == null) {
       throw new IllegalArgumentException(ERROR_CATEGORY_NOT_PASSED.getMessage());
     }
-    CrudUtils.provideBaseFields(dto);
+    CrudUtils.provideCreationTime(dto);
+    dto.setId(UUID.randomUUID());
     CategoryEntity entity = cs.convert(dto, CategoryEntity.class);
     if (entity == null) {
       throw new IllegalStateException(ERROR_NULL_CONVERSION.getMessage());
@@ -68,7 +69,8 @@ public class CategoryService implements ICategoryService {
     if (dto == null) {
       throw new IllegalArgumentException(ERROR_CATEGORY_NOT_PASSED.getMessage());
     }
-    CrudUtils.provideBaseFields(dto);
+    CrudUtils.provideCreationTime(dto);
+    dto.setId(UUID.randomUUID());
     dto.setParentCategory(parentId);
     CategoryEntity entity = cs.convert(dto, CategoryEntity.class);
     if (entity == null) {

@@ -1,5 +1,6 @@
 package com.artzvrzn.store.classifier.dao.entity;
 
+import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,8 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "category", schema = "app")
-public class CategoryEntity extends BaseEntity {
-
+public class CategoryEntity extends BaseEntity<UUID> {
   private String name;
   @ManyToOne
   @JoinColumn(referencedColumnName = "id")

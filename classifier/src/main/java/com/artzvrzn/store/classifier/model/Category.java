@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(SnakeCaseStrategy.class)
-public class Category extends BaseDto {
+public class Category extends BaseDto<UUID> {
   private String name;
   private UUID parentCategory;
 }

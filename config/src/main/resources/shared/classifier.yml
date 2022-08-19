@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/onlinestore
+    username: postgres
+    password: 111
+currency-rate:
+  api-key:
+  base: USD
+  url: https://api.apilayer.com/fixer/latest?base=${currency-rate.base}&symbols=

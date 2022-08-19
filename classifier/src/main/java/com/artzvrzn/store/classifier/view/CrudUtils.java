@@ -20,10 +20,8 @@ public final class CrudUtils {
     return optional.get();
   }
 
-  public static <T extends BaseDto> void provideBaseFields(T dto) {
-    LocalDateTime currentTime = LocalDateTime.now(ZoneOffset.UTC);
-    dto.setId(UUID.randomUUID());
-    dto.setCreated(currentTime);
-    dto.setUpdated(currentTime);
+  public static <T extends BaseDto<?>> void provideCreationTime(T dto) {
+    dto.setCreated(LocalDateTime.now(ZoneOffset.UTC));
+    dto.setUpdated(dto.getCreated());
   }
 }
