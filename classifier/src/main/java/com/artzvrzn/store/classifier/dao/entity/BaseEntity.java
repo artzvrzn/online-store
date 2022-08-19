@@ -11,11 +11,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseEntity<ID> {
+public abstract class BaseEntity<ID> {
   @Id
+  @Column(unique = true, updatable = false)
   private ID id;
-  @Column(columnDefinition = "timestamp(3)")
+  @Column(columnDefinition = "timestamp(3)", updatable = false)
   private LocalDateTime created;
-  @Column(columnDefinition = "timestamp(3)")
+  @Column(columnDefinition = "timestamp(3)", updatable = false)
   private LocalDateTime updated;
 }

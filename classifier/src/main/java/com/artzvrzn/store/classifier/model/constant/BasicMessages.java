@@ -4,12 +4,15 @@ public enum BasicMessages {
 
   ERROR_RECORD_NOT_EXIST("record doesn't exist"),
   ERROR_RECORD_UPDATED("record has already been updated"),
+  ERROR_RECORD_EXIST("record already exist"),
   ERROR_CATEGORY_NOT_PASSED("category has not been passed"),
   ERROR_CURRENCY_NOT_PASSED("currency has not been passed"),
   ERROR_NULL_CONVERSION("conversion has led to null value"),
   LOG_CREATED("{} has been created with id {}"),
   LOG_UPDATED("{} has been updated"),
-  LOG_DELETED("{} has been deleted");
+  LOG_DELETED("{} has been deleted"),
+  LOG_HTTP_REQUEST_ERROR("{} request to {} has returned the error (code: {}, message: {})"),
+  LOG_REQUEST_SUCCESS("{} request to {}. response: {}");
   private final String message;
 
   BasicMessages(String message) {

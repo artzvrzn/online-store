@@ -83,9 +83,7 @@ public class CategoryService implements ICategoryService {
   @Override
   public Category update(Category dto, UUID id, LocalDateTime updated) {
     CategoryEntity entity = CrudUtils.getEntityOrThrow(id, repository);
-    if (!entity.getUpdated().isEqual(updated)) {
-      throw new IllegalArgumentException(ERROR_RECORD_UPDATED.getMessage());
-    }
+    CrudUtils.optimisticBlockCheck(entity, updated);
     dto.setUpdated(LocalDateTime.now(ZoneOffset.UTC));
     entity = cs.convert(dto, CategoryEntity.class);
     if (entity == null) {
@@ -99,9 +97,7 @@ public class CategoryService implements ICategoryService {
   @Override
   public void delete(UUID id, LocalDateTime updated) {
     CategoryEntity entity = CrudUtils.getEntityOrThrow(id, repository);
-    if (!entity.getUpdated().isEqual(updated)) {
-      throw new IllegalArgumentException(ERROR_RECORD_UPDATED.getMessage());
-    }
+    CrudUtils.optimisticBlockCheck(entity, updated);
     repository.delete(entity);
     log.debug(LOG_DELETED.toString(), DTO_NAME, entity.getId());
   }

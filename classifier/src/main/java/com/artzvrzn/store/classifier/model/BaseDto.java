@@ -8,9 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class BaseDto<ID> {
-  @JsonProperty(access = Access.READ_ONLY)
-  private ID id;
+public abstract class BaseDto {
   @JsonProperty(access = Access.READ_ONLY)
   private LocalDateTime created;
   @JsonProperty(access = Access.READ_ONLY)

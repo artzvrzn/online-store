@@ -11,7 +11,7 @@ public class CurrencyEntityToDtoConverter implements Converter<Currency, Currenc
   @Override
   public CurrencyEntity convert(Currency dto) {
     CurrencyEntity entity = new CurrencyEntity();
-    entity.setId(dto.getId());
+    entity.setId(dto.getName());
     entity.setCreated(dto.getCreated());
     entity.setUpdated(dto.getUpdated());
     entity.setDescription(dto.getDescription());

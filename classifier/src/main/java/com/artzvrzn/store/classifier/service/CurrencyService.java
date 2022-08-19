@@ -13,10 +13,6 @@ import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +34,6 @@ public class CurrencyService implements ICurrencyService {
   }
 
   @Override
-  public Page<Currency> get(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-    return repository.findAll(pageable).map(e -> cs.convert(e, Currency.class));
-  }
-
-  @Override
   public List<Currency> getAll() {
     return repository.findAll()
         .stream()
@@ -56,20 +46,30 @@ public class CurrencyService implements ICurrencyService {
     if (dto == null) {
       throw new IllegalStateException(ERROR_CURRENCY_NOT_PASSED.getMessage());
     }
+    if (repository.findById(dto.getName()).isPresent()) {
+      throw new IllegalArgumentException(ERROR_RECORD_EXIST.getMessage());
+    }
     CrudUtils.provideCreationTime(dto);
     CurrencyEntity entity = cs.convert(dto, CurrencyEntity.class);
     if (entity == null) {
       throw new IllegalStateException(ERROR_NULL_CONVERSION.getMessage());
     }
     repository.save(entity);
+    log.debug(LOG_CREATED.getMessage(), "currency", entity.getId());
     return dto;
   }
 
   @Override
-  public void updateRate(String name, BigDecimal value) {
+  public Currency update(Currency dto, String name, LocalDateTime updated) {
     CurrencyEntity entity = CrudUtils.getEntityOrThrow(name, repository);
-    entity.setRate(value);
+    CrudUtils.optimisticBlockCheck(entity, updated);
+    dto.setUpdated(LocalDateTime.now(ZoneOffset.UTC));
+    entity.setUpdated(dto.getUpdated());
+    entity.setDescription(dto.getDescription());
+    entity.setRate(dto.getRate());
     repository.save(entity);
+    log.debug(LOG_UPDATED.getMessage(), "currency", name);
+    return dto;
   }
 
   @Override
@@ -82,6 +82,6 @@ public class CurrencyService implements ICurrencyService {
       }
     }
     repository.saveAll(currencyEntities);
-    log.info("exchange rates has been updated");
+    log.info(LOG_UPDATED.getMessage(), "exchange rates");
   }
 }

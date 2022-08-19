@@ -7,14 +7,16 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/onlinestore
     username: postgres
     password: 111
 currency-rates-api:
-  request-rate: 600000
   api-key: 89T51IDzBjPz4lZkwe7mY1D72lfMd9j6
   base: USD
   url: https://api.apilayer.com/exchangerates_data/latest?base=${currency-rates-api.base}&symbols=
+  exchange-rate:
+    cron: 0 0 0 * * *
+    timezone: UTC
