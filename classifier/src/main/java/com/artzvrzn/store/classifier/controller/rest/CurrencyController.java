@@ -1,7 +1,7 @@
 package com.artzvrzn.store.classifier.controller.rest;
 
 import com.artzvrzn.store.classifier.model.Currency;
-import com.artzvrzn.store.classifier.view.api.ICurrencyService;
+import com.artzvrzn.store.classifier.service.api.ICurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

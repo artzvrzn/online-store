@@ -1,9 +1,9 @@
-package com.artzvrzn.store.classifier.view;
+package com.artzvrzn.store.classifier.service;
 
 import com.artzvrzn.store.classifier.dao.api.CategoryRepository;
 import com.artzvrzn.store.classifier.dao.entity.CategoryEntity;
 import com.artzvrzn.store.classifier.model.Category;
-import com.artzvrzn.store.classifier.view.api.ICategoryService;
+import com.artzvrzn.store.classifier.service.api.ICategoryService;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
@@ -23,7 +23,6 @@ import static com.artzvrzn.store.classifier.model.constant.BasicMessages.*;
 @Transactional(rollbackOn = Exception.class)
 @Log4j2
 public class CategoryService implements ICategoryService {
-
   private static final String DTO_NAME = "category";
   @Autowired
   private CategoryRepository repository;

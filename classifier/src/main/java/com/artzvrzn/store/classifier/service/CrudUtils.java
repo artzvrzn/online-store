@@ -1,11 +1,10 @@
-package com.artzvrzn.store.classifier.view;
+package com.artzvrzn.store.classifier.service;
 
 import com.artzvrzn.store.classifier.model.BaseDto;
 import com.artzvrzn.store.classifier.model.constant.BasicMessages;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
-import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;
 
 public final class CrudUtils {

@@ -1,8 +1,7 @@
-package com.artzvrzn.store.classifier.view.api;
+package com.artzvrzn.store.classifier.service.api;
 
 import com.artzvrzn.store.classifier.model.Category;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 

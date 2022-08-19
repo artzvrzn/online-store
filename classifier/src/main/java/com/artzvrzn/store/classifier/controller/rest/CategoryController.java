@@ -1,10 +1,9 @@
 package com.artzvrzn.store.classifier.controller.rest;
 
 import com.artzvrzn.store.classifier.model.Category;
-import com.artzvrzn.store.classifier.view.api.ICategoryService;
+import com.artzvrzn.store.classifier.service.api.ICategoryService;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.print.attribute.standard.Media;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

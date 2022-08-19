@@ -1,4 +1,4 @@
-package com.artzvrzn.store.classifier.view;
+package com.artzvrzn.store.classifier.listener;
 
 import com.artzvrzn.store.classifier.dao.api.CurrencyRepository;
 import com.artzvrzn.store.classifier.dao.entity.CurrencyEntity;
@@ -16,18 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional(rollbackFor = Exception.class)
-public class CurrencyHandler {
-
+public class CurrencyCreatorOnStart {
   @Autowired
   private CurrencyRepository currencyRepository;
-
-  //scheduled
-  private void updateRates() {
-    List<CurrencyEntity> currencyEntities = currencyRepository.findAll();
-    for (CurrencyEntity entity: currencyEntities) {
-      //TODO update rate
-    }
-  }
 
   @EventListener
   private void onApplicationStartEvent(ContextRefreshedEvent event) {
@@ -40,7 +31,6 @@ public class CurrencyHandler {
     Arrays.stream(BaseCurrency.values())
         .filter(e -> existCurrencies.contains(e.name()))
         .forEach(this::persistEntity);
-
   }
 
   private void persistEntity(BaseCurrency baseCurrency) {
@@ -49,7 +39,7 @@ public class CurrencyHandler {
     currency.setDescription(baseCurrency.getDescription());
     currency.setCreated(LocalDateTime.now(ZoneOffset.UTC));
     currency.setUpdated(currency.getCreated());
-    currency.setRate(new BigDecimal(1)); //TODO apply rest client
+    currency.setRate(new BigDecimal(1));
     currencyRepository.save(currency);
   }
 

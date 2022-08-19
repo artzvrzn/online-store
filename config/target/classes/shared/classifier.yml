@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /classifier
-  port: 8000
+  port: 8001
 spring:
   jpa:
     database: POSTGRESQL
@@ -13,7 +13,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/onlinestore
     username: postgres
     password: 111
-currency-rate:
-  api-key:
+currency-rates-api:
+  request-rate: 600000
+  api-key: 89T51IDzBjPz4lZkwe7mY1D72lfMd9j6
   base: USD
-  url: https://api.apilayer.com/fixer/latest?base=${currency-rate.base}&symbols=
+  url: https://api.apilayer.com/exchangerates_data/latest?base=${currency-rates-api.base}&symbols=
