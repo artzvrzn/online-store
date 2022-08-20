@@ -17,6 +17,6 @@ public abstract class BaseEntity<ID> {
   private ID id;
   @Column(columnDefinition = "timestamp(3)", updatable = false)
   private LocalDateTime created;
-  @Column(columnDefinition = "timestamp(3)", updatable = false)
+  @Column(columnDefinition = "timestamp(3)")
   private LocalDateTime updated;
 }

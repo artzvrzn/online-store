@@ -3,9 +3,11 @@ package com.artzvrzn.store.classifier.controller.rest;
 import com.artzvrzn.store.classifier.model.Category;
 import com.artzvrzn.store.classifier.service.api.ICategoryService;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,20 +35,26 @@ public class CategoryController {
 
   @GetMapping(value = {"/", ""}, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public Page<Category> get(@RequestParam("page") int page, @RequestParam("size") int size) {
-    return categoryService.getPage(page, size);
+  public List<Category> getAllCategories() {
+    return categoryService.getAll();
   }
 
   @GetMapping(
-      value = {"/{uuid}/subcategories", "/{uuid}/subcategories/"},
-      produces = MediaType.APPLICATION_JSON_VALUE)
+      value = {"/{uuid}/direct_subcategory", "/{uuid}/direct_subcategory/"},
+      produces = MediaType.APPLICATION_JSON_VALUE
+  )
   @ResponseStatus(HttpStatus.OK)
-  public Page<Category> getSubcategories(
-      @PathVariable("uuid") UUID parentId,
-      @RequestParam("page") int page,
-      @RequestParam("size") int size
-  ) {
-    return categoryService.getSubcategories(parentId, page, size);
+  public List<Category> getDirectSubcategories(@PathVariable("uuid") UUID parentId) {
+    return categoryService.getDirectSubcategories(parentId);
+  }
+
+  @GetMapping(
+      value = {"/{uuid}/indirect_subcategory", "/{uuid}/indirect_subcategory/"},
+      produces = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ResponseStatus(HttpStatus.OK)
+  public List<Category> getIndirectSubcategories(@PathVariable("uuid") UUID parentId) {
+    return categoryService.getIndirectSubcategories(parentId);
   }
 
   @PostMapping(
@@ -56,7 +63,7 @@ public class CategoryController {
       produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.CREATED)
-  public Category create(@RequestBody Category category) {
+  public Category create(@RequestBody @Valid Category category) {
     return categoryService.create(category);
   }
 
@@ -67,7 +74,7 @@ public class CategoryController {
   )
   @ResponseStatus(HttpStatus.CREATED)
   public Category createSubcategory(
-      @RequestBody Category category,
+      @RequestBody @Valid Category category,
       @PathVariable("uuid") UUID parentId
   ) {
     return categoryService.createSubcategory(category, parentId);
@@ -82,7 +89,7 @@ public class CategoryController {
   public Category update(
       @PathVariable("uuid") UUID id,
       @PathVariable("updated") LocalDateTime updated,
-      @RequestBody Category category
+      @RequestBody @Valid Category category
   ) {
     return categoryService.update(category, id, updated);
   }
@@ -94,7 +101,7 @@ public class CategoryController {
   @ResponseStatus(HttpStatus.OK)
   public void delete(
       @PathVariable("uuid") UUID id,
-      @PathVariable("updated") LocalDateTime updated
+      @PathVariable("updated") @DateTimeFormat() LocalDateTime updated
   ) {
     categoryService.delete(id, updated);
   }

@@ -2,13 +2,15 @@ package com.artzvrzn.store.classifier.scheduled;
 
 import com.artzvrzn.store.classifier.model.Currency;
 import com.artzvrzn.store.classifier.model.ExchangeRate;
-import com.artzvrzn.store.classifier.model.constant.BasicMessages;
+import com.artzvrzn.store.classifier.model.constant.CommonMessage;
 import com.artzvrzn.store.classifier.service.api.ICurrencyService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.ContextStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,12 +35,20 @@ public class RateUpdater {
   @Autowired
   private RestTemplate restTemplate;
 
+  @EventListener
+  public void refreshRateWhenApplicationStarts(ContextStartedEvent event) {
+    updateRates();
+  }
+
   @Scheduled(
       cron = "${currency-rates-api.exchange-rate.cron}",
       zone = "${currency-rates-api.exchange-rate.timezone}"
   )
   public void updateRates() {
     List<Currency> currencies = currencyService.getAll();
+    if (currencies.isEmpty()) {
+      return;
+    }
 
     String url = currencies
         .stream()
@@ -51,7 +61,7 @@ public class RateUpdater {
       exchangeRate = getRates(url);
     } catch (HttpStatusCodeException exc) {
       log.error(
-          BasicMessages.LOG_HTTP_REQUEST_ERROR.getMessage(),
+          CommonMessage.LOG_HTTP_REQUEST_ERROR.getMessage(),
           "GET",
           url,
           exc.getStatusCode(),
@@ -59,7 +69,7 @@ public class RateUpdater {
           exc.getMessage());
       return;
     }
-    log.info(BasicMessages.LOG_REQUEST_SUCCESS.getMessage(), "GET", url, exchangeRate);
+    log.info(CommonMessage.LOG_REQUEST_SUCCESS.getMessage(), "GET", url, exchangeRate);
     currencyService.updateRates(exchangeRate.getRates());
   }
 

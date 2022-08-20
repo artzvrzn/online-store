@@ -7,12 +7,16 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/onlinestore
     username: postgres
     password: 111
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 currency-rates-api:
   api-key: 89T51IDzBjPz4lZkwe7mY1D72lfMd9j6
   base: USD

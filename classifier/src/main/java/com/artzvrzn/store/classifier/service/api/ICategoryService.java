@@ -2,6 +2,7 @@ package com.artzvrzn.store.classifier.service.api;
 
 import com.artzvrzn.store.classifier.model.Category;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 
@@ -9,9 +10,11 @@ public interface ICategoryService {
 
   Category get(UUID id);
 
-  Page<Category> getPage(int page, int size);
+  List<Category> getAll();
 
-  Page<Category> getSubcategories(UUID parentId, int page, int size);
+  List<Category> getDirectSubcategories(UUID parentId);
+
+  List<Category> getIndirectSubcategories(UUID parentId);
 
   Category create(Category dto);
 

@@ -4,6 +4,7 @@ import com.artzvrzn.store.classifier.model.Currency;
 import com.artzvrzn.store.classifier.service.api.ICurrencyService;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,6 @@ public class CurrencyController {
   @Autowired
   private ICurrencyService currencyService;
 
-  @GetMapping(value = {"/", ""}, produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public List<Currency> getAll() {
-    return currencyService.getAll();
-  }
-
   @GetMapping(
       value = {"/{id}", "/{id}/"},
       consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -37,7 +32,13 @@ public class CurrencyController {
   )
   @ResponseStatus(HttpStatus.OK)
   public Currency get(@PathVariable("id") String id) {
-    return currencyService.get(id);
+    return currencyService.get(id.toUpperCase());
+  }
+
+  @GetMapping(value = {"/", ""}, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public List<Currency> getAll() {
+    return currencyService.getAll();
   }
 
   @PostMapping(
@@ -46,11 +47,15 @@ public class CurrencyController {
       produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.CREATED)
-  public Currency create(@RequestBody Currency currency) {
+  public Currency create(@RequestBody @Valid Currency currency) {
     return currencyService.create(currency);
   }
 
-  @PutMapping(value = {"/{id}/{updated}", "/{id}/{updated}/"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(
+      value = {"/{id}/{updated}", "/{id}/{updated}/"},
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE
+  )
   @ResponseStatus(HttpStatus.OK)
   public Currency update(
       @RequestBody Currency currency,

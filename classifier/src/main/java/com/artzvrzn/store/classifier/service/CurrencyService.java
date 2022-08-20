@@ -2,6 +2,7 @@ package com.artzvrzn.store.classifier.service;
 
 import com.artzvrzn.store.classifier.dao.api.CurrencyRepository;
 import com.artzvrzn.store.classifier.dao.entity.CurrencyEntity;
+import com.artzvrzn.store.classifier.exception.RecordAlreadyExist;
 import com.artzvrzn.store.classifier.model.Currency;
 import com.artzvrzn.store.classifier.service.api.ICurrencyService;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.artzvrzn.store.classifier.model.constant.BasicMessages.*;
+import static com.artzvrzn.store.classifier.model.constant.CommonMessage.*;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -47,7 +48,7 @@ public class CurrencyService implements ICurrencyService {
       throw new IllegalStateException(ERROR_CURRENCY_NOT_PASSED.getMessage());
     }
     if (repository.findById(dto.getName()).isPresent()) {
-      throw new IllegalArgumentException(ERROR_RECORD_EXIST.getMessage());
+      throw new RecordAlreadyExist(ERROR_RECORD_EXIST.getMessage());
     }
     CrudUtils.provideCreationTime(dto);
     CurrencyEntity entity = cs.convert(dto, CurrencyEntity.class);
@@ -63,8 +64,7 @@ public class CurrencyService implements ICurrencyService {
   public Currency update(Currency dto, String name, LocalDateTime updated) {
     CurrencyEntity entity = CrudUtils.getEntityOrThrow(name, repository);
     CrudUtils.optimisticBlockCheck(entity, updated);
-    dto.setUpdated(LocalDateTime.now(ZoneOffset.UTC));
-    entity.setUpdated(dto.getUpdated());
+    entity.setUpdated(LocalDateTime.now(ZoneOffset.UTC));
     entity.setDescription(dto.getDescription());
     entity.setRate(dto.getRate());
     repository.save(entity);
