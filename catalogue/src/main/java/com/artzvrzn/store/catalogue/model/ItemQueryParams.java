@@ -9,22 +9,22 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class ProductQueryParams {
-  private final ProductOrder order;
+public class ItemQueryParams {
+  private final ItemOrder order;
   private final UUID category;
   private final List<String> brand;
   private final Integer minPrice;
   private final Integer maxPrice;
 
   @JsonCreator
-  public ProductQueryParams(
+  public ItemQueryParams(
       @JsonProperty String order,
       @JsonProperty UUID category,
       @JsonProperty List<String> brand,
       @JsonProperty Integer min,
       @JsonProperty Integer max
   ) {
-    this.order = ProductOrder.valueOfOrDefault(order);
+    this.order = ItemOrder.valueOfOrDefault(order);
     this.category = category;
     this.brand = brand;
     this.minPrice = min;

@@ -1,10 +1,9 @@
 package com.artzvrzn.store.catalogue.dao.specification;
 
-import com.artzvrzn.store.catalogue.dao.entity.ProductEntity;
-import com.artzvrzn.store.catalogue.model.ProductQueryParams;
+import com.artzvrzn.store.catalogue.dao.entity.ItemEntity;
+import com.artzvrzn.store.catalogue.model.ItemQueryParams;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -13,13 +12,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
 @AllArgsConstructor
-public class ProductQuerySpecification implements Specification<ProductEntity> {
+public class ItemQuerySpecification implements Specification<ItemEntity> {
 
-  private ProductQueryParams params;
+  private ItemQueryParams params;
 
   @Override
   public Predicate toPredicate(
-      Root<ProductEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+      Root<ItemEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
     List<Predicate> predicates = new ArrayList<>();
     if (params.getBrand() != null && !params.getBrand().isEmpty()) {
       predicates.add(getBrandsPredicate(params, root, cb));
@@ -33,10 +32,11 @@ public class ProductQuerySpecification implements Specification<ProductEntity> {
     if (params.getMaxPrice() != null) {
       predicates.add(getMaxPricePredicate(params, root, cb));
     }
-    return cb.and(predicates.toArray(Predicate[]::new));
+    return predicates.isEmpty() ? null : cb.and(predicates.toArray(Predicate[]::new));
   }
 
-  private static Predicate getBrandPredicate(String brand, Root<ProductEntity> root, CriteriaBuilder cb) {
+  private static Predicate getBrandPredicate(
+      String brand, Root<ItemEntity> root, CriteriaBuilder cb) {
     final String field = "brand";
     if (brand.startsWith("!")) {
       return cb.notEqual(cb.upper(root.get(field)), brand.substring(1).toUpperCase());
@@ -46,7 +46,7 @@ public class ProductQuerySpecification implements Specification<ProductEntity> {
   }
 
   private static Predicate getBrandsPredicate(
-      ProductQueryParams params, Root<ProductEntity> root, CriteriaBuilder cb) {
+      ItemQueryParams params, Root<ItemEntity> root, CriteriaBuilder cb) {
     return cb.and(
         params.getBrand()
             .stream()
@@ -55,17 +55,17 @@ public class ProductQuerySpecification implements Specification<ProductEntity> {
   }
 
   private static Predicate getCategoryPredicate(
-      ProductQueryParams params, Root<ProductEntity> root, CriteriaBuilder cb) {
+      ItemQueryParams params, Root<ItemEntity> root, CriteriaBuilder cb) {
     return cb.equal(root.get("category"), params.getCategory());
   }
 
   private static Predicate getMinPricePredicate(
-      ProductQueryParams params, Root<ProductEntity> root, CriteriaBuilder cb) {
+      ItemQueryParams params, Root<ItemEntity> root, CriteriaBuilder cb) {
     return cb.greaterThanOrEqualTo(root.get("price"), params.getMinPrice());
   }
 
   private static Predicate getMaxPricePredicate(
-      ProductQueryParams params, Root<ProductEntity> root, CriteriaBuilder cb) {
+      ItemQueryParams params, Root<ItemEntity> root, CriteriaBuilder cb) {
     return cb.lessThanOrEqualTo(root.get("price"), params.getMaxPrice());
   }
 }

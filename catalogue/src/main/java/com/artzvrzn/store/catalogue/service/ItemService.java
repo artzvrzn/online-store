@@ -1,13 +1,12 @@
 package com.artzvrzn.store.catalogue.service;
 
 import com.artzvrzn.store.catalogue.client.api.ClassifierCategoryClient;
-import com.artzvrzn.store.catalogue.client.api.ClassifierCurrencyClient;
-import com.artzvrzn.store.catalogue.dao.api.ProductRepository;
-import com.artzvrzn.store.catalogue.dao.entity.ProductEntity;
-import com.artzvrzn.store.catalogue.dao.specification.ProductQuerySpecification;
-import com.artzvrzn.store.catalogue.model.Product;
-import com.artzvrzn.store.catalogue.model.ProductQueryParams;
-import com.artzvrzn.store.catalogue.service.api.IProductService;
+import com.artzvrzn.store.catalogue.dao.api.ItemRepository;
+import com.artzvrzn.store.catalogue.dao.entity.ItemEntity;
+import com.artzvrzn.store.catalogue.dao.specification.ItemQuerySpecification;
+import com.artzvrzn.store.catalogue.model.Item;
+import com.artzvrzn.store.catalogue.model.ItemQueryParams;
+import com.artzvrzn.store.catalogue.service.api.IItemService;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -23,40 +22,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class ProductService implements IProductService {
+public class ItemService implements IItemService {
 
   @Autowired
-  private ProductRepository productRepository;
+  private ItemRepository itemRepository;
   @Autowired
   private ClassifierCategoryClient categoryClient;
   @Autowired
   private ModelMapper mapper;
 
   @Override
-  public Product get(UUID id) {
-    return null;
+  public Item get(UUID id) {
+    return mapper.map(getEntityOrThrow(id), Item.class);
   }
 
   @Override
-  public Page<Product> get(int page, int size, ProductQueryParams params) {
+  public Page<Item> get(int page, int size, ItemQueryParams params) {
     Pageable pageable = PageRequest.of(page, size, params.getOrder().getSort());
-    return productRepository.findAll(new ProductQuerySpecification(params), pageable)
-        .map(e -> mapper.map(e, Product.class));
+    return itemRepository.findAll(new ItemQuerySpecification(params), pageable)
+        .map(e -> mapper.map(e, Item.class));
   }
 
   @Override
-  public Product create(Product dto) {
+  public Item create(Item dto) {
     validateDtoValues(dto);
     dto.setId(UUID.randomUUID());
     dto.setCreated(LocalDateTime.now(ZoneOffset.UTC));
     dto.setUpdated(dto.getCreated());
-    productRepository.save(mapper.map(dto, ProductEntity.class));
+    itemRepository.save(mapper.map(dto, ItemEntity.class));
     return dto;
   }
 
   @Override
-  public Product update(Product dto, UUID id, LocalDateTime updated) {
-    ProductEntity entity = getEntityOrThrow(id);
+  public Item update(Item dto, UUID id, LocalDateTime updated) {
+    ItemEntity entity = getEntityOrThrow(id);
     validateDtoValues(dto);
     optimisticLockCheck(entity, updated);
     dto.setUpdated(LocalDateTime.now(ZoneOffset.UTC));
@@ -67,41 +66,30 @@ public class ProductService implements IProductService {
     entity.setPrice(dto.getPrice());
     entity.setCategory(dto.getCategory());
     entity.setImage(dto.getImage());
-    entity.setRating(dto.getRating());
-    productRepository.save(entity);
+    itemRepository.save(entity);
     return dto;
   }
 
   @Override
-  public void incrementRating(UUID id) {
-    productRepository.incrementRating(id);
-  }
-
-  @Override
-  public void decrementRating(UUID id) {
-    productRepository.decrementRating(id);
-  }
-
-  @Override
   public void delete(UUID id, LocalDateTime updated) {
-    ProductEntity entity = getEntityOrThrow(id);
+    ItemEntity entity = getEntityOrThrow(id);
     optimisticLockCheck(entity, updated);
-    productRepository.delete(entity);
+    itemRepository.delete(entity);
   }
 
   private boolean isCategoryExist(UUID id) {
     return categoryClient.headForHeaders(id).getStatusCode().equals(HttpStatus.OK);
   }
 
-  private ProductEntity getEntityOrThrow(UUID id) {
-    Optional<ProductEntity> optionalEntity = productRepository.findById(id);
+  private ItemEntity getEntityOrThrow(UUID id) {
+    Optional<ItemEntity> optionalEntity = itemRepository.findById(id);
     if (optionalEntity.isEmpty()) {
       throw new IllegalArgumentException("doesn't exist");
     }
     return optionalEntity.get();
   }
 
-  private void validateDtoValues(Product dto) {
+  private void validateDtoValues(Item dto) {
     if (dto == null) {
       throw new IllegalArgumentException("dto is null");
     }
@@ -110,7 +98,7 @@ public class ProductService implements IProductService {
     }
   }
 
-  private void optimisticLockCheck(ProductEntity entity, LocalDateTime updated) {
+  private void optimisticLockCheck(ItemEntity entity, LocalDateTime updated) {
     if (!entity.getUpdated().isEqual(updated)) {
       throw new IllegalStateException("already updated");
     }

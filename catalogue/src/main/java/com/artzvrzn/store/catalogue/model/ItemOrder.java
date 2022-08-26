@@ -3,7 +3,7 @@ package com.artzvrzn.store.catalogue.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import org.springframework.data.domain.Sort;
 
-public enum ProductOrder {
+public enum ItemOrder {
 
   PRICE_ASC("price:asc", Sort.by("price").ascending()),
   PRICE_DESC("price:desc", Sort.by("price").descending()),
@@ -14,14 +14,14 @@ public enum ProductOrder {
   private final String query;
   private final Sort sort;
 
-  ProductOrder(String query, Sort sort) {
+  ItemOrder(String query, Sort sort) {
     this.query = query;
     this.sort = sort;
   }
 
   @JsonCreator
-  public static ProductOrder valueOfOrDefault(String query) {
-    for (ProductOrder order : ProductOrder.values()) {
+  public static ItemOrder valueOfOrDefault(String query) {
+    for (ItemOrder order : ItemOrder.values()) {
       if (order.getQuery().equalsIgnoreCase(query)) {
         return order;
       }

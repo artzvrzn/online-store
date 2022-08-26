@@ -1,5 +1,8 @@
 package com.artzvrzn.store.catalogue.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Getter;
@@ -7,7 +10,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Product extends BaseDto {
+@JsonNaming(SnakeCaseStrategy.class)
+public class Item extends BaseDto {
   private UUID id;
   private String name;
   private String description;
@@ -15,5 +19,6 @@ public class Product extends BaseDto {
   private BigDecimal price;
   private UUID category;
   private String image;
-  private int rating;
+  @JsonProperty("rating")
+  private int avgRating;
 }
