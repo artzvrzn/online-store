@@ -12,9 +12,13 @@ public interface ICategoryService {
 
   List<Category> getAll();
 
+  List<Category> getTopLevelCategories();
+
   List<Category> getDirectSubcategories(UUID parentId);
 
   List<Category> getIndirectSubcategories(UUID parentId);
+
+  boolean isExist(UUID id);
 
   Category create(Category dto);
 

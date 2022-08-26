@@ -43,6 +43,11 @@ public class CurrencyService implements ICurrencyService {
   }
 
   @Override
+  public boolean isExist(String name) {
+    return repository.existsById(name);
+  }
+
+  @Override
   public Currency create(Currency dto) {
     if (dto == null) {
       throw new IllegalStateException(ERROR_CURRENCY_NOT_PASSED.getMessage());

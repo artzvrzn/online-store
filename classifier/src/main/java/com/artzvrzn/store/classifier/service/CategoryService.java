@@ -47,6 +47,14 @@ public class CategoryService implements ICategoryService {
   }
 
   @Override
+  public List<Category> getTopLevelCategories() {
+    return repository.findAllByParentCategory_Id(null, Sort.by("name"))
+        .stream()
+        .map(c -> cs.convert(c, Category.class))
+        .collect(Collectors.toList());
+  }
+
+  @Override
   public List<Category> getDirectSubcategories(UUID parentId) {
     return repository.findAllByParentCategory_Id(parentId, Sort.by("name"))
         .stream()
@@ -69,6 +77,11 @@ public class CategoryService implements ICategoryService {
         .collect(Collectors.toList());
   }
 
+  @Override
+  public boolean isExist(UUID id) {
+    return repository.existsById(id);
+  }
+
   private void preorderTraversal(CategoryEntity entity, Set<CategoryEntity> descendants) {
     if (entity.getParentCategory() != null) {
       descendants.add(entity);
@@ -83,7 +96,7 @@ public class CategoryService implements ICategoryService {
     if (dto == null) {
       throw new IllegalArgumentException(ERROR_CATEGORY_NOT_PASSED.getMessage());
     }
-    if (repository.findByName(dto.getName()).isPresent()) {
+    if (repository.existsByName(dto.getName())) {
       throw new RecordAlreadyExist(ERROR_RECORD_EXIST.getMessage());
     }
     CrudUtils.provideCreationTime(dto);
@@ -101,6 +114,9 @@ public class CategoryService implements ICategoryService {
   public Category createSubcategory(Category dto, UUID parentId) {
     if (dto == null) {
       throw new IllegalArgumentException(ERROR_CATEGORY_NOT_PASSED.getMessage());
+    }
+    if (repository.existsByName(dto.getName())) {
+      throw new RecordAlreadyExist(ERROR_RECORD_EXIST.getMessage());
     }
     CrudUtils.provideCreationTime(dto);
     dto.setId(UUID.randomUUID());

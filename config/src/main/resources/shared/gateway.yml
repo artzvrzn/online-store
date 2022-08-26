@@ -1,8 +1,14 @@
 server:
   port: 8080
-zuul:
-  routes:
-    classifier:
-      path: /classifier/**
-      serviceId: classifier
-      stripPrefix: false
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: classifier-service
+          uri: lb://classifier-service
+          predicates:
+           - Path=/classifier/**
+        - id: catalogue-service
+          uri: lb://catalogue-service
+          predicates:
+          - Path=/catalogue/**

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -56,6 +57,14 @@ public class ExceptionAdvice {
     return new ResponseSingleError(ERROR, e.getMessage());
   }
 
+  @ExceptionHandler(ConversionFailedException.class)
+  @ResponseBody
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseSingleError conversionFailedHandler(ConversionFailedException e) {
+    log.error(LOG_ERROR.getMessage(), e.getClass().getSimpleName(), e.getMessage());
+    return new ResponseSingleError(ERROR, e.getCause().getMessage());
+  }
+
   @ExceptionHandler(IllegalStateException.class)
   @ResponseBody
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -76,7 +85,7 @@ public class ExceptionAdvice {
   @ResponseBody
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseSingleError otherExceptionHandler(Exception e) {
-    log.error(LOG_ERROR.getMessage(), e.getClass().getSimpleName(), e.getMessage());
+    log.error(LOG_ERROR.getMessage(), e.getClass().getSimpleName(), e.getMessage(), e.getCause());
     return new ResponseSingleError(ERROR, ERROR_UNEXPECTED.getMessage());
   }
 }
