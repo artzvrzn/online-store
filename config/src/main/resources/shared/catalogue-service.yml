@@ -12,8 +12,13 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/catalogue
     username: postgres
-    password: 111
+    password: postgres
   data:
     web:
       pageable:
         one-indexed-parameters: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth-service:9000

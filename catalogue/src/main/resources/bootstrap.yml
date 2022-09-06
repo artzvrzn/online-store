@@ -1,6 +1,6 @@
 spring:
   application:
-    name: catalogue
+    name: catalogue-service
   cloud:
     config:
       fail-fast: true
@@ -20,4 +20,6 @@ feign:
         loggerLevel: basic
 logging:
   level:
-    root: INFO
+    org:
+      springframework:
+        security: DEBUG

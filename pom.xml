@@ -13,7 +13,6 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.3</version>
-    <relativePath/>
   </parent>
 
   <properties>
@@ -33,11 +32,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-jsr310</artifactId>
-        <version>2.13.3</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -47,6 +41,7 @@
     <module>classifier</module>
     <module>registry</module>
     <module>catalogue</module>
+    <module>auth</module>
   </modules>
 
 </project>
