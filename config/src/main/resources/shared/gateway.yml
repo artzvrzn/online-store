@@ -18,6 +18,10 @@ spring:
           uri: http://auth-service:9000
           predicates:
             - Path=/auth/**
+        - id: order-service
+          uri: http://localhost:8003
+          predicates:
+            - Path=/order/**
   security:
     oauth2:
       client:

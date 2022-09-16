@@ -17,6 +17,11 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth-service:9000
 currency-rates-api:
   api-key: 89T51IDzBjPz4lZkwe7mY1D72lfMd9j6
   base: USD

@@ -1,5 +1,6 @@
 package com.artzvrzn.store.auth.config.security;
 
+import java.time.Duration;
 import java.util.UUID;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.server.authorization.client.InMemoryR
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
+import org.springframework.security.oauth2.server.authorization.config.TokenSettings;
 
 @Configuration
 public class AuthorizationServerConfig {
@@ -27,6 +29,11 @@ public class AuthorizationServerConfig {
         .scope(OidcScopes.OPENID)
         .scope("store.read")
         .scope("store.write")
+        .tokenSettings(
+            TokenSettings.builder()
+                .accessTokenTimeToLive(Duration.ofDays(1))
+                .refreshTokenTimeToLive(Duration.ofDays(7))
+                .build())
         .build();
     return new InMemoryRegisteredClientRepository(registeredClient);
   }

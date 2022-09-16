@@ -1,0 +1,36 @@
+server:
+  servlet:
+    context-path: /order
+  port: 8003
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/order
+    username: postgres
+    password: postgres
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth-service:9000

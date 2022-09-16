@@ -49,7 +49,7 @@ public class UserService implements IUserService {
       userDto.setPassword("123");
       userDto.setEmail("admin@email.com");
       userDto.setUsername("admin");
-      userDto.setLastName("admin");
+      userDto.setFirstName("admin");
       userDto.setLastName("admin");
       userDto.setStatus(Status.ACTIVE);
       User user = mapper.map(userDto, User.class);

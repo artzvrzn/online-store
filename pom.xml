@@ -42,6 +42,7 @@
     <module>registry</module>
     <module>catalogue</module>
     <module>auth</module>
+    <module>order</module>
   </modules>
 
 </project>
