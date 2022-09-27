@@ -11,11 +11,10 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .mvcMatcher("/**")
-        .authorizeRequests()
-        .mvcMatchers("/**")
-        .access("hasAuthority('SCOPE_store.read')")
-        .and()
+        .authorizeHttpRequests(auth -> auth
+                .mvcMatchers("/cart").hasAuthority("SCOPE_store.read")
+                .anyRequest().authenticated()
+        )
         .oauth2ResourceServer()
         .jwt();
     return http.build();

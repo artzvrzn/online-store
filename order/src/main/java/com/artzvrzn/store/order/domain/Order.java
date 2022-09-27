@@ -1,6 +1,5 @@
 package com.artzvrzn.store.order.domain;
 
-import com.artzvrzn.store.order.service.Cart;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
@@ -44,12 +43,4 @@ public class Order {
   private Payment payment;
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
-
-  public void setItems(Cart cart) {
-    this.items = cart.getItems();
-  }
-
-  public Cart getItems() {
-    return new Cart(items);
-  }
 }

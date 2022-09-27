@@ -43,20 +43,4 @@ public class Oauth2UserDetailsService implements UserDetailsService {
     throw new AuthenticationCredentialsNotFoundException("wrong password");
   }
 
-  private Map<String, Object> getClaims(UserDto userDto) {
-    Map<String, Object> claims = new HashMap<>();
-    claims.put("id", userDto.getId());
-    claims.put("username", userDto.getUsername());
-    claims.put("firstName", userDto.getFirstName());
-    claims.put("lastName", userDto.getLastName());
-    claims.put("status", userDto.getStatus());
-    claims.put("email", userDto.getEmail());
-    claims.put("phone", userDto.getPhone());
-    claims.put("country", userDto.getCountry());
-    claims.put("city", userDto.getCity());
-    claims.put("street", userDto.getStreet());
-    claims.put("apartment", userDto.getApartment());
-    return claims;
-  }
-
 }

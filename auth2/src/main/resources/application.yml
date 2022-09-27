@@ -1,0 +1,13 @@
+server:
+  servlet:
+    context-path: /auth
+  port: 8999
+jwt:
+  secret:
+    access: x9n2TrG0ZzqVV81teG850wsj70/siWzy4HwDZZIhYDhTdxbkZU6fM5Bc6tpxW+z1vOjzQeJL3VIs9uBZhxSkkQ==
+    refresh: oAgL73bn/nj42XMoL6nawNbo5cpSf4mA87Zu42vGJ6uFkaDKxmmkoKNcjP513PcXFYn39VVe+IZQsOYh3zoSuw==
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 60000

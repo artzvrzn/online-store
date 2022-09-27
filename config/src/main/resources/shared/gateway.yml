@@ -37,3 +37,8 @@ spring:
         provider:
           auth-service:
             issuer-uri: http://auth-service:9000
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
