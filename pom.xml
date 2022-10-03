@@ -41,9 +41,7 @@
     <module>classifier</module>
     <module>registry</module>
     <module>catalogue</module>
-    <module>auth</module>
     <module>order</module>
-    <module>auth2</module>
   </modules>
 
 </project>
