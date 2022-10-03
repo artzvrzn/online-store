@@ -16,8 +16,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
@@ -27,8 +30,11 @@ public class Order {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
+  @CreationTimestamp
   @Column(updatable = false, columnDefinition = "timestamp(3)")
   private LocalDateTime created;
+  @UpdateTimestamp
+  @Version
   @Column(columnDefinition = "timestamp(3)")
   private LocalDateTime updated;
   @ElementCollection
@@ -39,8 +45,8 @@ public class Order {
   private Map<UUID, Integer> items;
   @Embedded
   private UserInfo userInfo;
-  @Embedded
-  private Payment payment;
+  @Enumerated(EnumType.STRING)
+  private PaymentType paymentType;
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
 }

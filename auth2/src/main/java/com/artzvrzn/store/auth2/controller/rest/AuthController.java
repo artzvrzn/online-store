@@ -49,12 +49,11 @@ public class AuthController {
   }
 
   @PostMapping(
-      value = "/refresh",
-      consumes = MediaType.APPLICATION_JSON_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE
+    value = "/refresh",
+    consumes = MediaType.APPLICATION_JSON_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE
   )
   public JwtResponse getNewRefreshToken(@RequestBody RefreshTokenRequest request) {
     return authService.refresh(request.getToken());
   }
-
 }

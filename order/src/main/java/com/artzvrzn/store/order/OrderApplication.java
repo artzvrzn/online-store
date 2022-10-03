@@ -2,10 +2,11 @@ package com.artzvrzn.store.order;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.artzvrzn.store.order.client")
 @EnableJpaRepositories(basePackages = "com.artzvrzn.store.order.dao")
 @SpringBootApplication

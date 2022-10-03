@@ -1,3 +1,7 @@
+auth-server:
+  http://auth-service:8888
+realm-name:
+  dev
 server:
   servlet:
     context-path: /catalogue
@@ -21,4 +25,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth-service:9000
+          issuer-uri: ${auth-server}/realms/${realm-name}

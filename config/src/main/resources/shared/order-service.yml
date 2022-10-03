@@ -1,3 +1,5 @@
+auth-server:
+  http://auth-service:8888
 server:
   servlet:
     context-path: /order
@@ -19,18 +21,21 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/order
     username: postgres
     password: postgres
-  data:
-    web:
-      pageable:
-        one-indexed-parameters: true
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth-service:9000
+          issuer-uri: ${auth-server}/realms/dev
+keycloak:
+  service-authentication:
+    username: order-service
+    password: 123
+    client-id: online-store
+    client-secret: qC0YE9ur2OQw2jDz1AQZCeLuw8ECBWvl
+    token-url: ${auth-server}/realms/dev/protocol/openid-connect/token

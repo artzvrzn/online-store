@@ -12,12 +12,12 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(auth -> auth
-                .mvcMatchers("/cart").hasAuthority("SCOPE_store.read")
+//                .mvcMatchers("/test").hasAuthority("SCOPE_store.read")
+                .mvcMatchers("/test").permitAll()
                 .anyRequest().authenticated()
         )
         .oauth2ResourceServer()
         .jwt();
     return http.build();
   }
-
 }

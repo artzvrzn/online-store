@@ -1,3 +1,7 @@
+auth-server:
+  http://auth-service:8888
+realm-name:
+  dev
 server:
   servlet:
     context-path: /classifier
@@ -21,7 +25,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth-service:9000
+          issuer-uri: ${auth-server}/realms/${realm-name}
 currency-rates-api:
   api-key: 89T51IDzBjPz4lZkwe7mY1D72lfMd9j6
   base: USD

@@ -1,16 +1,16 @@
 package com.artzvrzn.store.order.service.api;
 
 import com.artzvrzn.store.order.domain.Order;
+import com.artzvrzn.store.order.dto.request.OrderRequest;
 import com.artzvrzn.store.order.dto.response.OrderResponse;
-import com.artzvrzn.store.order.storage.cart.CartStorage;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 
 public interface IOrderService {
 
-  void checkout(CartStorage cart);
+  void checkout(OrderRequest orderRequest);
 
-  void update(UUID id, Order order);
+  void update(UUID id, OrderRequest orderRequest);
 
   Page<OrderResponse> get(int page, int size);
 

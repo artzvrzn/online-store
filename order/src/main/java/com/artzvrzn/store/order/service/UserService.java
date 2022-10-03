@@ -3,6 +3,8 @@ package com.artzvrzn.store.order.service;
 import com.artzvrzn.store.order.domain.UserInfo;
 import com.artzvrzn.store.order.service.api.IUserService;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -16,10 +18,10 @@ public class UserService implements IUserService {
     Jwt token = ((JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication())
         .getToken();
     return UserInfo.builder()
-        .userId(UUID.fromString(token.getClaim("id")))
-        .username(token.getClaim("username"))
-        .firstName(token.getClaim("firstName"))
-        .lastName(token.getClaim("lastName"))
+        .userId(UUID.fromString(token.getClaim("sub")))
+        .username(token.getClaim("preferred_username"))
+        .firstName(token.getClaim("given_name"))
+        .lastName(token.getClaim("family_name"))
         .build();
   }
 }
