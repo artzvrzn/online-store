@@ -22,7 +22,7 @@ public class TestController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public String userInfo() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    SecurityContextHolder.getContext().getAuthentication()
     return serviceToken.getToken();
   }
 }
