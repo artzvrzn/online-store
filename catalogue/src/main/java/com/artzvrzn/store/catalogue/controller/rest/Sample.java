@@ -1,17 +1,12 @@
 package com.artzvrzn.store.catalogue.controller.rest;
 
-import com.artzvrzn.store.catalogue.dto.request.ItemRequest;
-import com.artzvrzn.store.catalogue.dto.response.ItemResponse;
+import com.artzvrzn.store.catalogue.dto.ItemDto;
 import com.artzvrzn.store.catalogue.service.api.ItemService;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.concurrent.DelegatingSecurityContextRunnable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +19,7 @@ public class Sample {
   private ItemService itemService;
 
   @PostMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
-  public Object get(@PathVariable("id") UUID id, ItemRequest itemRequest) throws InterruptedException {
+  public Object get(@PathVariable("id") UUID id, ItemDto dto) throws InterruptedException {
     Thread[] threads = new Thread[10];
 
     for (int i = 0; i < threads.length; i++) {

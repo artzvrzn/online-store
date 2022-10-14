@@ -1,12 +1,10 @@
 package com.artzvrzn.store.catalogue.controller.rest;
 
-import com.artzvrzn.store.catalogue.dto.request.CategoryRequest;
-import com.artzvrzn.store.catalogue.dto.response.CategoryResponse;
+import com.artzvrzn.store.catalogue.dto.CategoryDto;
 import com.artzvrzn.store.catalogue.service.api.CategoryService;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +28,19 @@ public class CategoryController {
 
   @GetMapping(value = {"/{uuid}", "/{uuid}/"}, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public CategoryResponse get(@PathVariable("uuid") UUID id) {
+  public CategoryDto get(@PathVariable("uuid") UUID id) {
     return categoryService.get(id);
   }
 
   @GetMapping(value = {"/", ""}, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public List<CategoryResponse> getTopLevelCategories() {
+  public List<CategoryDto> getTopLevelCategories() {
     return categoryService.getTopLevelCategories();
   }
 
   @GetMapping(value = {"/all", "/all/"}, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public List<CategoryResponse> getAllCategories() {
+  public List<CategoryDto> getAllCategories() {
     return categoryService.getAll();
   }
 
@@ -51,7 +49,7 @@ public class CategoryController {
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  public List<CategoryResponse> getDirectSubcategories(@PathVariable("uuid") UUID parentId) {
+  public List<CategoryDto> getDirectSubcategories(@PathVariable("uuid") UUID parentId) {
     return categoryService.getDirectSubcategories(parentId);
   }
 
@@ -60,7 +58,7 @@ public class CategoryController {
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  public List<CategoryResponse> getIndirectSubcategories(@PathVariable("uuid") UUID parentId) {
+  public List<CategoryDto> getIndirectSubcategories(@PathVariable("uuid") UUID parentId) {
     return categoryService.getIndirectSubcategories(parentId);
   }
 
@@ -76,7 +74,7 @@ public class CategoryController {
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.CREATED)
-  public CategoryResponse create(@RequestBody CategoryRequest request) {
+  public CategoryDto create(@RequestBody CategoryDto request) {
     return categoryService.create(request);
   }
 
@@ -86,9 +84,9 @@ public class CategoryController {
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  public CategoryResponse update(
+  public CategoryDto update(
     @PathVariable("uuid") UUID id,
-    @RequestBody CategoryRequest request
+    @RequestBody CategoryDto request
   ) {
     return categoryService.update(request, id);
   }

@@ -1,29 +1,18 @@
 package com.artzvrzn.store.catalogue.service.api;
 
-import com.artzvrzn.store.catalogue.domain.Category;
-import com.artzvrzn.store.catalogue.dto.request.CategoryRequest;
-import com.artzvrzn.store.catalogue.dto.response.CategoryResponse;
-import java.time.LocalDateTime;
+import com.artzvrzn.store.catalogue.dto.CategoryDto;
 import java.util.List;
 import java.util.UUID;
 
-public interface CategoryService {
+public interface CategoryService extends CRUDService<CategoryDto, UUID> {
 
-  CategoryResponse get(UUID id);
+  List<CategoryDto> getAll();
 
-  List<CategoryResponse> getAll();
+  List<CategoryDto> getTopLevelCategories();
 
-  List<CategoryResponse> getTopLevelCategories();
+  List<CategoryDto> getDirectSubcategories(UUID parentId);
 
-  List<CategoryResponse> getDirectSubcategories(UUID parentId);
-
-  List<CategoryResponse> getIndirectSubcategories(UUID parentId);
+  List<CategoryDto> getIndirectSubcategories(UUID parentId);
 
   boolean isExist(UUID id);
-
-  CategoryResponse create(CategoryRequest request);
-
-  CategoryResponse update(CategoryRequest request, UUID id);
-
-  void delete(UUID id);
 }

@@ -8,9 +8,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import org.springframework.boot.jackson.JsonComponent;
 
-@JsonComponent
+//@JsonComponent
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
-
 
   @Override
   public void serialize(LocalDateTime ldt, JsonGenerator jg, SerializerProvider sp)

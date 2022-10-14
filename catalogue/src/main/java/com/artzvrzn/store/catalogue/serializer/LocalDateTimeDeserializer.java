@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import org.springframework.boot.jackson.JsonComponent;
 
-@JsonComponent
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
   @Override

@@ -15,15 +15,19 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * @param <A> type of author id
+ * @param <E> type of entity id
+ */
 @Getter
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditableEntity<T> {
+public abstract class AuditableEntity<A, E> implements Entity<E> {
   @CreatedBy
-  protected T createdBy;
+  protected A createdBy;
   @LastModifiedBy
-  protected T modifiedBy;
+  protected A modifiedBy;
   @CreatedDate
   @Column(columnDefinition = "timestamp(3)")
   protected LocalDateTime created;

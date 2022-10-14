@@ -2,10 +2,12 @@ package com.artzvrzn.store.catalogue.dao.specification;
 
 import com.artzvrzn.store.catalogue.domain.Item;
 import com.artzvrzn.store.catalogue.domain.ItemQueryParams;
+import com.artzvrzn.store.catalogue.domain.Rating;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import lombok.AllArgsConstructor;

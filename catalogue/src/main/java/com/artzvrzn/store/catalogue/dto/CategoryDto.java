@@ -1,14 +1,13 @@
-package com.artzvrzn.store.catalogue.dto.request;
+package com.artzvrzn.store.catalogue.dto;
 
 import java.util.UUID;
-import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryRequest {
-  @NotBlank
+public class CategoryDto implements Dto {
+  private UUID id;
   private String name;
   private UUID parentCategory;
 }

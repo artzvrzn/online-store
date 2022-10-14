@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "category", schema = "app")
-public class Category extends AuditableEntity<UUID> {
+public class Category extends AuditableEntity<UUID, UUID> {
   @Id
   @GeneratedValue(generator = "UUID")
   @Setter(value = AccessLevel.PRIVATE)

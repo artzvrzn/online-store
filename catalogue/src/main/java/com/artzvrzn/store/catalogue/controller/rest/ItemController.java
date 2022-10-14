@@ -1,7 +1,6 @@
 package com.artzvrzn.store.catalogue.controller.rest;
 
-import com.artzvrzn.store.catalogue.dto.request.ItemRequest;
-import com.artzvrzn.store.catalogue.dto.response.ItemResponse;
+import com.artzvrzn.store.catalogue.dto.ItemDto;
 import com.artzvrzn.store.catalogue.domain.ItemQueryParams;
 import com.artzvrzn.store.catalogue.service.api.ItemService;
 import java.util.UUID;
@@ -23,33 +22,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/item")
 public class ItemController {
-
   @Autowired
   private ItemService itemService;
 
-  @GetMapping(value = "/item/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = {"/{id}", "/{id}/"}, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ItemResponse get(@PathVariable("id") UUID id) {
+  public ItemDto get(@PathVariable("id") UUID id) {
     return itemService.get(id);
   }
 
-  @GetMapping(value = {"/", ""}, produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = {"", "/"}, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public Page<ItemResponse> get(
+  public Page<ItemDto> get(
     @RequestParam("page") int page,
     @RequestParam("size") int size,
     ItemQueryParams params
   ) {
-    return itemService.get(page, size, params);
+    return itemService.getPage(page, size, params);
   }
 
   @PostMapping(
-    value = {"/", ""},
+    value = {"", "/"},
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.CREATED)
-  public ItemResponse create(@RequestBody @Valid ItemRequest request) {
+  public ItemDto create(@RequestBody @Valid ItemDto request) {
     return itemService.create(request);
   }
 
@@ -59,10 +57,7 @@ public class ItemController {
     produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  public ItemResponse update(
-    @RequestBody @Valid ItemRequest request,
-    @PathVariable("id") UUID id
-    ) {
+  public ItemDto update(@RequestBody @Valid ItemDto request, @PathVariable("id") UUID id) {
     return itemService.update(request, id);
   }
 }

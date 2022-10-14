@@ -4,8 +4,8 @@ import static com.artzvrzn.store.catalogue.domain.constant.CommonMessage.*;
 
 import com.artzvrzn.store.catalogue.dao.api.CategoryRepository;
 import com.artzvrzn.store.catalogue.domain.Category;
-import com.artzvrzn.store.catalogue.dto.request.CategoryRequest;
-import com.artzvrzn.store.catalogue.dto.response.CategoryResponse;
+import com.artzvrzn.store.catalogue.dto.CategoryDto;
+import com.artzvrzn.store.catalogue.mapper.CategoryMapper;
 import com.artzvrzn.store.catalogue.service.api.CategoryService;
 import com.artzvrzn.store.catalogue.service.util.CrudUtils;
 import java.util.Collections;
@@ -28,41 +28,40 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
   private static final String ENTITY_NAME = "category";
   private final CategoryRepository repository;
-  private final ModelMapper mapper;
-
+  private final CategoryMapper mapper;
   @Override
-  public CategoryResponse get(UUID id) {
-    return mapper.map(CrudUtils.getEntityOrThrow(id, repository), CategoryResponse.class);
+  public CategoryDto get(UUID id) {
+    return mapper.toDto(CrudUtils.getEntityOrThrow(id, repository));
   }
 
   @Override
-  public List<CategoryResponse> getAll() {
+  public List<CategoryDto> getAll() {
     return repository.findAll(Sort.by("name"))
         .stream()
-        .map(e -> mapper.map(e, CategoryResponse.class))
+        .map(mapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
-  public List<CategoryResponse> getTopLevelCategories() {
+  public List<CategoryDto> getTopLevelCategories() {
     return repository.findAllByParentCategory_Id(null, Sort.by("name"))
         .stream()
-        .map(e -> mapper.map(e, CategoryResponse.class))
+        .map(mapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
-  public List<CategoryResponse> getDirectSubcategories(UUID parentId) {
+  public List<CategoryDto> getDirectSubcategories(UUID parentId) {
     return repository.findAllByParentCategory_Id(parentId, Sort.by("name"))
         .stream()
-        .map(e -> mapper.map(e, CategoryResponse.class))
+        .map(mapper::toDto)
         .collect(Collectors.toList());
   }
 
   @Override
   @Transactional
   //TODO Temporal solution. (Makes queries recursively)
-  public List<CategoryResponse> getIndirectSubcategories(UUID parentId) {
+  public List<CategoryDto> getIndirectSubcategories(UUID parentId) {
     Category parentCategory = CrudUtils.getEntityOrThrow(parentId, repository);
     if (parentCategory.getSubcategories().isEmpty()) {
       return Collections.emptyList();
@@ -70,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
     return getAllDescendants(parentCategory)
         .stream()
         .filter(c -> !c.getId().equals(parentCategory.getId()))
-        .map(e -> mapper.map(e, CategoryResponse.class))
+        .map(mapper::toDto)
         .collect(Collectors.toList());
   }
 
@@ -81,25 +80,25 @@ public class CategoryServiceImpl implements CategoryService {
 
   @Override
   @Transactional
-  public CategoryResponse create(CategoryRequest request) {
-    validateRequest(request);
-    Category parentCategory = request.getParentCategory() == null ? null :
-      CrudUtils.getEntityOrThrow(request.getParentCategory(), repository);
+  public CategoryDto create(CategoryDto dto) {
+    validateRequest(dto);
+    Category parentCategory = dto.getParentCategory() == null ? null :
+      CrudUtils.getEntityOrThrow(dto.getParentCategory(), repository);
     Category category = Category.builder()
-      .withName(request.getName())
+      .withName(dto.getName())
       .withParentCategory(parentCategory)
       .build();
     category = repository.save(category);
     log.debug(LOG_CREATED.toString(), ENTITY_NAME, category.getId());
-    return mapper.map(category, CategoryResponse.class);
+    return mapper.toDto(category);
   }
 
   @Override
   @Transactional
-  public CategoryResponse update(CategoryRequest request, UUID id) {
+  public CategoryDto update(CategoryDto dto, UUID id) {
     Category parentCategory = null;
-    if (request.getParentCategory() != null) {
-      parentCategory = CrudUtils.getEntityOrThrow(request.getParentCategory(), repository);
+    if (dto.getParentCategory() != null) {
+      parentCategory = CrudUtils.getEntityOrThrow(dto.getParentCategory(), repository);
       if (isDescendant(id, parentCategory)) {
         throw new IllegalArgumentException("Circular dependency");
       }
@@ -109,7 +108,7 @@ public class CategoryServiceImpl implements CategoryService {
     category.setParentCategory(parentCategory);
     category = repository.save(category);
     log.debug(LOG_UPDATED.toString(), ENTITY_NAME, id);
-    return mapper.map(category, CategoryResponse.class);
+    return mapper.toDto(category);
   }
 
   @Override
@@ -139,11 +138,11 @@ public class CategoryServiceImpl implements CategoryService {
     return isDescendant(id, category.getParentCategory());
   }
 
-  private void validateRequest(CategoryRequest request) {
-    if (request == null) {
+  private void validateRequest(CategoryDto dto) {
+    if (dto == null) {
       throw new IllegalArgumentException(ERROR_CATEGORY_NOT_PASSED.getMessage());
     }
-    if (repository.existsByName(request.getName())) {
+    if (repository.existsByName(dto.getName())) {
       throw new IllegalArgumentException(ERROR_RECORD_EXIST.getMessage());
     }
   }
